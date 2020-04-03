@@ -5,3 +5,7 @@ type Binance struct {
 	AccessKey string
 	SecretKey string
 }
+
+func GetUserAccount() {
+
+}
