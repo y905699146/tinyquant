@@ -1,0 +1,2 @@
+{"level":"info","time":"20200404_002058","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200404_002058","caller":"cmd/orderServer.go:15","msg":"start server"}

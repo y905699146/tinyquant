@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -22,17 +21,24 @@ func InitHttpClient(url string, data interface{}) {
 }
 
 func HttpGet() {
-	req, err := http.NewRequest("GET", Binance_Baseurl+"/fapi/v1/depth", nil)
+
+	url := "https://api.binance.com/api/v3/time"
+	method := "GET"
+
+	client := &http.Client{}
+	req, err := http.NewRequest(method, url, nil)
+
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
 	}
-	resp, err := http.DefaultClient.Do(req)
+	res, err := client.Do(req)
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
 	}
-	data, err := ioutil.ReadAll(resp.Body)
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
 	}
-	fmt.Println(string(data))
+	fmt.Println(string(body))
 }
