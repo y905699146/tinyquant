@@ -1,44 +1,89 @@
 package util
 
 import (
-	"encoding/json"
+	"context"
+	"crypto/tls"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
-	"strings"
+	"net/url"
+	"time"
+	"tinyquant/src/logger"
+	"tinyquant/src/mod"
+
+	"go.uber.org/zap"
+
+	"github.com/spf13/viper"
 )
 
-func InitHttpClient(url string, data interface{}) {
-	d, err := json.Marshal(data)
-	if err != nil {
-		fmt.Println(err)
-	}
+var (
+	client    *http.Client
+	baseURL   string
+	apiKey    string
+	secretKey string
+)
 
-	body := strings.NewReader(string(d))
-	req, err := http.NewRequest("POST", url, body)
-	clt := http.Client{}
-	clt.Do(req)
+func init() {
+	if client == nil {
+		client = initHttpClient()
+	}
 }
 
-func HttpGet() {
-
-	url := "https://api.binance.com/api/v3/time"
-	method := "GET"
-
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, nil)
-
-	if err != nil {
-		fmt.Println(err)
+func InitSystemParams() {
+	baseURL = viper.GetString("system.BaseUrl")
+	if baseURL == "" {
+		panic("Get Binance base url failed ")
 	}
-	res, err := client.Do(req)
+	apiKey = viper.GetString("system.ApiKey")
+	if apiKey == "" {
+		panic("Get ApiKey  failed ")
+	}
+	secretKey = viper.GetString("system.SecretKey")
+	if secretKey == "" {
+		panic("Get secretKey failed ")
+	}
+}
+
+func initHttpClient() *http.Client {
+	client := &http.Client{
+		Transport: &http.Transport{
+			DialContext: (&net.Dialer{
+				Timeout:   5 * time.Second,
+				KeepAlive: 5 * time.Second,
+			}).DialContext,
+			MaxIdleConns:        30,               //最大空闲连接数
+			MaxIdleConnsPerHost: 60,               //最大与服务器的连接数  默认是2
+			IdleConnTimeout:     30 * time.Second, //空闲连接保持时间
+			Proxy: func(_ *http.Request) (*url.URL, error) {
+				return url.Parse("http://127.0.0.1:7890")
+			},
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, // disable verify
+		},
+	}
+	return client
+}
+
+func HttpRequest(ctx context.Context, req *mod.ReqParam) ([]byte, error) {
+
+	urlx := fmt.Sprintf("%s%s", baseURL, req.Url)
+	r, err := http.NewRequest(req.Method, urlx, nil)
+	r = r.WithContext(ctx)
 	if err != nil {
-		fmt.Println(err)
+		logger.Logger.Error("http request failed ", zap.Error(err))
+		return []byte{}, err
+	}
+	res, err := client.Do(r)
+	if err != nil {
+		logger.Logger.Error("http Do failed ", zap.Error(err))
+		return []byte{}, err
 	}
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println(err)
+		logger.Logger.Error("io read failed ", zap.Error(err))
+		return []byte{}, err
 	}
-	fmt.Println(string(body))
+
+	return body, err
 }

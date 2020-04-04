@@ -1,16 +1,22 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"tinyquant/src/config"
 	"tinyquant/src/logger"
-
-	"github.com/spf13/viper"
+	"tinyquant/src/quant"
+	"tinyquant/src/util"
 )
 
 func main() {
 	config.InitConfig()
 	logger.InitLogger()
-	fmt.Println(viper.GetString("system.ApiKey"))
 	logger.Logger.Info("start server")
+
+	util.InitSystemParams()
+
+	binance := quant.NewBinance()
+	t, err := binance.GetServiceTime(context.Background())
+	fmt.Println(t, err)
 }
