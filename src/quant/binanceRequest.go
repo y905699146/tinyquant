@@ -134,11 +134,66 @@ func (b *Binance) GetHostoryTrades(ctx context.Context, symbol string, limit int
 	return p, nil
 }
 
+type LatestTradesA struct {
+	A int64  `json:"a"`
+	P string `json:"p"`
+	Q string `json:"q"`
+	F int64  `json:"f"`
+	L int64  `json:"l"`
+	T int64  `json:"t"`
+	M bool   `json:"m"`
+}
+
+type LatestTradesAList []*LatestTradesA
+
 /*
 	近期成交（归集） 归集交易与逐笔交易的区别在于，同一价格、同一方向、同一时间的trade会被聚合为一条
-	symbol	STRING		YES
-	fromId	LONG		NO	从包含fromId的成交id开始返回结果
-	startTime	LONG	NO	从该时刻之后的成交记录开始返回结果
-	endTime	LONG		NO	返回该时刻为止的成交记录
-	limit	INT			NO	默认 500; 最大 1000.
+	symbol(必需) ：品种
+	fromId	：从包含fromId的成交id开始返回结果
+	startTime  ：  从该时刻之后的成交记录开始返回结果
+	endTime	：	返回该时刻为止的成交记录
+	limit ： 默认 500; 最大 1000.
+	如果发送startTime和endTime，间隔必须小于一小时。
+	如果没有发送任何筛选参数(fromId, startTime,endTime)，默认返回最近的成交记录
+*/
+
+func (b *Binance) GetLatestTradeA(ctx context.Context, symbol string, fromId int64, startTime int64, endTime int64, limit int32) (*LatestTradesAList, error) {
+	r := &mod.ReqParam{
+		Method: "GET",
+		URL:    util.LatestTrades,
+	}
+	r.SetParam(util.SymbolKey, symbol)
+	if limit != 0 {
+		r.SetParam(util.LimitKey, limit)
+	}
+	if fromId != 0 {
+		r.SetParam("fromId", fromId)
+	}
+	if startTime != 0 {
+		r.SetParam("startTime", startTime)
+	}
+	if endTime != 0 {
+		r.SetParam("endTime", endTime)
+	}
+	data, err := util.HttpRequest(ctx, r)
+	if err != nil {
+		logger.Logger.Error("Binance Service Get Latest trade a Failed", zap.Error(err))
+		return nil, err
+	}
+	p := new(LatestTradesAList)
+	err = json.Unmarshal(data, &p)
+	if err != nil {
+		logger.Logger.Error("Binance Service Get Latest trade a json Unmarshal Failed", zap.Error(err))
+		return nil, err
+	}
+	return p, nil
+}
+
+/*
+	获取k线数据
+	symbol(必需) : 品种
+	interval(必需) : 时间间隔
+	startTime :开始时间
+	endTime : 结束时间
+	limit : 默认 500; 最大 1000.
 */

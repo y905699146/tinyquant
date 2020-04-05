@@ -39,4 +39,5 @@ const (
 	DepthURL       = "/api/v3/depth"
 	LatestTrades   = "/api/v3/trades"
 	HistoryTrades  = "/api/v3/historicalTrades"
+	LatestTradesA  = "/api/v3/aggTrades"
 )
