@@ -13,35 +13,15 @@ import (
 	"tinyquant/src/mod"
 
 	"go.uber.org/zap"
-
-	"github.com/spf13/viper"
 )
 
 var (
-	client    *http.Client
-	baseURL   string
-	apiKey    string
-	secretKey string
+	client *http.Client
 )
 
 func init() {
 	if client == nil {
 		client = initHttpClient()
-	}
-}
-
-func InitSystemParams() {
-	baseURL = viper.GetString("system.BaseUrl")
-	if baseURL == "" {
-		panic("Get Binance base url failed ")
-	}
-	apiKey = viper.GetString("system.ApiKey")
-	if apiKey == "" {
-		panic("Get ApiKey  failed ")
-	}
-	secretKey = viper.GetString("system.SecretKey")
-	if secretKey == "" {
-		panic("Get secretKey failed ")
 	}
 }
 
@@ -66,9 +46,15 @@ func initHttpClient() *http.Client {
 
 func HttpRequest(ctx context.Context, req *mod.ReqParam) ([]byte, error) {
 
-	urlx := fmt.Sprintf("%s%s", baseURL, req.Url)
+	urlx := fmt.Sprintf("%s%s", BaseURL, req.URL)
+
+	queryString := req.Query.Encode()
+	if queryString != "" {
+		urlx = fmt.Sprintf("%s?%s", urlx, queryString)
+	}
 	r, err := http.NewRequest(req.Method, urlx, nil)
 	r = r.WithContext(ctx)
+	r.Header = req.Header
 	if err != nil {
 		logger.Logger.Error("http request failed ", zap.Error(err))
 		return []byte{}, err
@@ -84,6 +70,6 @@ func HttpRequest(ctx context.Context, req *mod.ReqParam) ([]byte, error) {
 		logger.Logger.Error("io read failed ", zap.Error(err))
 		return []byte{}, err
 	}
-
+	fmt.Println(string(body))
 	return body, err
 }

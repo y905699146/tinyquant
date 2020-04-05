@@ -19,4 +19,8 @@ func main() {
 	binance := quant.NewBinance()
 	t, err := binance.GetServiceTime(context.Background())
 	fmt.Println(t, err)
+
+	t1, err := binance.GetDepthMessage(context.Background(), "LTCBTC", 10)
+	fmt.Println(t1, err)
+
 }

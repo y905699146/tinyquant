@@ -24,7 +24,7 @@ type Ping struct {
 func (b *Binance) Ping(ctx context.Context) (*Ping, error) {
 	r := &mod.ReqParam{
 		Method: "GET",
-		Url:    "/api/v1/ping",
+		URL:    util.PingURL,
 	}
 	data, err := util.HttpRequest(ctx, r)
 	if err != nil {
@@ -47,7 +47,7 @@ type SeviceTime struct {
 func (b *Binance) GetServiceTime(ctx context.Context) (int64, error) {
 	r := &mod.ReqParam{
 		Method: "GET",
-		Url:    "/api/v3/time",
+		URL:    util.ServiceTimeURL,
 	}
 	data, err := util.HttpRequest(ctx, r)
 	if err != nil {
