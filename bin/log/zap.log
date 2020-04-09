@@ -15,3 +15,5 @@
 {"level":"error","time":"20200405_151229","caller":"quant/binanceRequest.go:45","msg":"Binance Service Get Depth json Unmarshal Failed","error":"json: cannot unmarshal array into Go struct field DepthMessage.bids of type quant.Bid","trace":"tinyquant/src/quant.(*Binance).GetDepthMessage\n\tC:/Users/yaojun/Desktop/tinyquant/src/quant/binanceRequest.go:45\nmain.main\n\tC:/Users/yaojun/Desktop/tinyquant/src/cmd/orderServer.go:23\nruntime.main\n\tC:/Go/src/runtime/proc.go:200"}
 {"level":"info","time":"20200405_151345","caller":"logger/logger.go:43","msg":"logger init success"}
 {"level":"info","time":"20200405_151345","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200409_215542","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200409_215542","caller":"cmd/orderServer.go:15","msg":"start server"}
