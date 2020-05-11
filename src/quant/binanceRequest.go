@@ -10,7 +10,7 @@ import (
 
 	"go.uber.org/zap"
 )
-
+/////////////////////////////*********获取行情数据**********//////////////////////////////////////
 type DepthMessage struct {
 	LastUpdateID int64      `json:"lastUpdateId"`
 	Bids         [][]string `json:"bids"`
@@ -197,3 +197,30 @@ func (b *Binance) GetLatestTradeA(ctx context.Context, symbol string, fromId int
 	endTime : 结束时间
 	limit : 默认 500; 最大 1000.
 */
+
+
+
+/*
+	获取平均价格
+	symbol(必需) : 品种
+*/
+
+
+/*
+	获取24小时内价格变化
+	symbol : 品种
+*/
+
+/*
+	获取交易对最新价格
+	symbol : 品种
+*/
+
+/*
+	获取当前最优挂单（最高买单，最低卖单）
+	symbol : 品种
+*/
+
+
+
+/////////////////////////////*********websocket行情推送**********//////////////////////////////////////
