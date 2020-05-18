@@ -1,4 +1,4 @@
-package quant
+package binance_test
 
 import (
 	"context"
