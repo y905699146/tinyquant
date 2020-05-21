@@ -6,5 +6,5 @@ import (
 )
 
 func TestHttpGet(t *testing.T) {
-	util.HttpGet()
+	//util.HttpGet()
 }

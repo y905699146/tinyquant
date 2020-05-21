@@ -1,8 +1,9 @@
-package quant
+package binance
 
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"tinyquant/src/logger"
 	"tinyquant/src/mod"
 	"tinyquant/src/util"
@@ -11,6 +12,10 @@ import (
 )
 
 type Binance struct {
+	accessKey  string
+	secretKey  string
+	baseUrl    string
+	httpClient *http.Client
 }
 
 func NewBinance() *Binance {
