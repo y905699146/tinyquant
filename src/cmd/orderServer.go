@@ -2,10 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"tinyquant/src/config"
 	"tinyquant/src/logger"
-	"tinyquant/src/quant"
+	"tinyquant/src/quant/binance"
 	"tinyquant/src/util"
 )
 
@@ -16,11 +15,9 @@ func main() {
 
 	util.InitSystemParams()
 
-	binance := quant.NewBinance()
-	t, err := binance.GetServiceTime(context.Background())
-	fmt.Println(t, err)
+	binance := binance.NewBinance()
+	binance.GetServiceTime(context.Background())
 
-	t1, err := binance.GetDepthMessage(context.Background(), "LTCBTC", 10)
-	fmt.Println(t1, err)
+	binance.GetDepthMessage(context.Background(), "LTCBTC", 10)
 
 }

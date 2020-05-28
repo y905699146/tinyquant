@@ -41,3 +41,8 @@ const (
 	HistoryTrades  = "/api/v3/historicalTrades"
 	LatestTradesA  = "/api/v3/aggTrades"
 )
+
+// 交易对
+const (
+	BTC_USDT = "BTCUSDT"
+)

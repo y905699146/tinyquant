@@ -17,3 +17,26 @@
 {"level":"info","time":"20200405_151345","caller":"cmd/orderServer.go:15","msg":"start server"}
 {"level":"info","time":"20200409_215542","caller":"logger/logger.go:43","msg":"logger init success"}
 {"level":"info","time":"20200409_215542","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200528_021943","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200528_021943","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200528_022130","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200528_022130","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200528_154026","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200528_154026","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200528_154057","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200528_154057","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200528_154121","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200528_154121","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200528_154257","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200528_154257","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"error","time":"20200528_154259","caller":"binance/binanceRequest.go:44","msg":"Binance Service Get Depth json Unmarshal Failed","error":"invalid character '<' looking for beginning of value","trace":"tinyquant/src/quant/binance.(*Binance).GetDepthMessage\n\tC:/Users/yaojun/Desktop/tinyquant/src/quant/binance/binanceRequest.go:44\nmain.main\n\tC:/Users/yaojun/Desktop/tinyquant/src/cmd/orderServer.go:23\nruntime.main\n\tC:/Go/src/runtime/proc.go:200"}
+{"level":"info","time":"20200528_154408","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200528_154408","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200528_221127","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200528_221127","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200528_221921","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200528_221921","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200528_221958","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200528_221958","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200528_222113","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200528_222113","caller":"cmd/orderServer.go:14","msg":"start server"}

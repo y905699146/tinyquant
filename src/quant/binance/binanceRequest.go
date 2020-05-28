@@ -1,20 +1,34 @@
-package binance_test
+package binance
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
+	"time"
 	"tinyquant/src/logger"
 	"tinyquant/src/mod"
 	"tinyquant/src/util"
 
 	"go.uber.org/zap"
 )
+
 /////////////////////////////*********获取行情数据**********//////////////////////////////////////
 type DepthMessage struct {
-	LastUpdateID int64      `json:"lastUpdateId"`
-	Bids         [][]string `json:"bids"`
-	Asks         [][]string `json:"asks"`
+	LastUpdateID int64 `json:"lastUpdateId"`
+	Time         time.Time
+	Bids         []*Bid `json:"bids"` //买方
+	Asks         []*Ask `json:"asks"` //卖方
+}
+
+// Bid define bid info with price and quantity
+type Bid struct {
+	Price    float64 //价格
+	Quantity float64 //挂单量
+}
+
+// Ask define ask info with price and quantity
+type Ask struct {
+	Price    float64
+	Quantity float64
 }
 
 /*
@@ -31,19 +45,39 @@ func (b *Binance) GetDepthMessage(ctx context.Context, symbol string, limit int3
 	if limit != 0 {
 		r.SetParam(util.LimitKey, limit)
 	}
-
+	depthMsg := &DepthMessage{}
 	data, err := util.HttpRequest(ctx, r)
 	if err != nil {
 		logger.Logger.Error("Binance Service Get Depth Failed", zap.Error(err))
 		return nil, err
 	}
-	p := new(DepthMessage)
-	err = json.Unmarshal(data, &p)
-	if err != nil {
-		logger.Logger.Error("Binance Service Get Depth json Unmarshal Failed", zap.Error(err))
+	if _, ok := data["code"]; ok {
 		return nil, err
 	}
-	return p, nil
+
+	depthMsg.LastUpdateID = util.ToInt64(data["lastUpdateId"])
+	for _, bid := range data["bids"].([]interface{}) {
+		_bid := bid.([]interface{})
+		quantity := util.ToFloat64(_bid[1])
+		price := util.ToFloat64(_bid[0])
+		b := &Bid{
+			Quantity: quantity,
+			Price:    price,
+		}
+		depthMsg.Bids = append(depthMsg.Bids, b)
+	}
+	for _, ask := range data["asks"].([]interface{}) {
+		_ask := ask.([]interface{})
+		quantity := util.ToFloat64(_ask[1])
+		price := util.ToFloat64(_ask[0])
+		a := &Ask{
+			Quantity: quantity,
+			Price:    price,
+		}
+		depthMsg.Asks = append(depthMsg.Asks, a)
+	}
+
+	return depthMsg, nil
 }
 
 type LatestTrades struct {
@@ -77,12 +111,11 @@ func (b *Binance) GetLatestTrade(ctx context.Context, symbol string, limit int32
 		logger.Logger.Error("Binance Service Get Latest trade Failed", zap.Error(err))
 		return nil, err
 	}
-	p := new(LatestTradesList)
-	err = json.Unmarshal(data, &p)
-	if err != nil {
-		logger.Logger.Error("Binance Service Get Latest trade json Unmarshal Failed", zap.Error(err))
+	if _, ok := data["code"]; ok {
 		return nil, err
 	}
+	p := new(LatestTradesList)
+
 	return p, nil
 }
 
@@ -125,12 +158,11 @@ func (b *Binance) GetHostoryTrades(ctx context.Context, symbol string, limit int
 		logger.Logger.Error("Binance Service Get Hostory Trades Failed", zap.Error(err))
 		return nil, err
 	}
-	p := new(HistoryTradesList)
-	err = json.Unmarshal(data, &p)
-	if err != nil {
-		logger.Logger.Error("Binance Service Get Hostory Trades json Unmarshal Failed", zap.Error(err))
+	if _, ok := data["code"]; ok {
 		return nil, err
 	}
+	p := new(HistoryTradesList)
+
 	return p, nil
 }
 
@@ -180,12 +212,11 @@ func (b *Binance) GetLatestTradeA(ctx context.Context, symbol string, fromId int
 		logger.Logger.Error("Binance Service Get Latest trade a Failed", zap.Error(err))
 		return nil, err
 	}
-	p := new(LatestTradesAList)
-	err = json.Unmarshal(data, &p)
-	if err != nil {
-		logger.Logger.Error("Binance Service Get Latest trade a json Unmarshal Failed", zap.Error(err))
+	if _, ok := data["code"]; ok {
 		return nil, err
 	}
+	p := new(LatestTradesAList)
+
 	return p, nil
 }
 
@@ -198,13 +229,10 @@ func (b *Binance) GetLatestTradeA(ctx context.Context, symbol string, fromId int
 	limit : 默认 500; 最大 1000.
 */
 
-
-
 /*
 	获取平均价格
 	symbol(必需) : 品种
 */
-
 
 /*
 	获取24小时内价格变化
@@ -220,7 +248,5 @@ func (b *Binance) GetLatestTradeA(ctx context.Context, symbol string, fromId int
 	获取当前最优挂单（最高买单，最低卖单）
 	symbol : 品种
 */
-
-
 
 /////////////////////////////*********websocket行情推送**********//////////////////////////////////////

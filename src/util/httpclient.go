@@ -3,6 +3,7 @@ package util
 import (
 	"context"
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net"
@@ -44,7 +45,7 @@ func initHttpClient() *http.Client {
 	return client
 }
 
-func HttpRequest(ctx context.Context, req *mod.ReqParam) ([]byte, error) {
+func HttpRequest(ctx context.Context, req *mod.ReqParam) (map[string]interface{}, error) {
 
 	urlx := fmt.Sprintf("%s%s", BaseURL, req.URL)
 
@@ -52,24 +53,35 @@ func HttpRequest(ctx context.Context, req *mod.ReqParam) ([]byte, error) {
 	if queryString != "" {
 		urlx = fmt.Sprintf("%s?%s", urlx, queryString)
 	}
+	fmt.Println("full urlx : ", urlx)
 	r, err := http.NewRequest(req.Method, urlx, nil)
 	r = r.WithContext(ctx)
-	r.Header = req.Header
+	if req.Header != nil {
+		r.Header = req.Header
+	}
+	r.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36")
 	if err != nil {
 		logger.Logger.Error("http request failed ", zap.Error(err))
-		return []byte{}, err
+		return nil, err
 	}
 	res, err := client.Do(r)
 	if err != nil {
 		logger.Logger.Error("http Do failed ", zap.Error(err))
-		return []byte{}, err
+		return nil, err
 	}
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		logger.Logger.Error("io read failed ", zap.Error(err))
-		return []byte{}, err
+		return nil, err
 	}
 	fmt.Println(string(body))
-	return body, err
+	var msg map[string]interface{}
+	err = json.Unmarshal(body, &msg)
+	if err != nil {
+		logger.Logger.Error("json unmarshal failed : ", zap.Error(err))
+		return nil, err
+	}
+	return msg, nil
+
 }
