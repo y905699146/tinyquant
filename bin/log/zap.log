@@ -40,3 +40,43 @@
 {"level":"info","time":"20200528_221958","caller":"cmd/orderServer.go:15","msg":"start server"}
 {"level":"info","time":"20200528_222113","caller":"logger/logger.go:43","msg":"logger init success"}
 {"level":"info","time":"20200528_222113","caller":"cmd/orderServer.go:14","msg":"start server"}
+{"level":"info","time":"20200530_034507","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_034507","caller":"cmd/orderServer.go:14","msg":"start server"}
+{"level":"info","time":"20200530_034942","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_034942","caller":"cmd/orderServer.go:14","msg":"start server"}
+{"level":"info","time":"20200530_040011","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_040011","caller":"cmd/orderServer.go:14","msg":"start server"}
+{"level":"info","time":"20200530_040038","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_040038","caller":"cmd/orderServer.go:14","msg":"start server"}
+{"level":"info","time":"20200530_040906","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_040906","caller":"cmd/orderServer.go:14","msg":"start server"}
+{"level":"info","time":"20200530_040935","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_040935","caller":"cmd/orderServer.go:14","msg":"start server"}
+{"level":"info","time":"20200530_041326","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_041326","caller":"cmd/orderServer.go:14","msg":"start server"}
+{"level":"info","time":"20200530_041439","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_041439","caller":"cmd/orderServer.go:14","msg":"start server"}
+{"level":"info","time":"20200530_041539","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_041539","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200530_043443","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_043443","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200530_043606","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_043606","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200530_043733","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_043733","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200530_045436","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_045436","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200530_045552","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_045552","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200530_045638","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_045638","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200530_050202","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_050202","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200530_050704","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_050704","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200530_051529","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_051529","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200530_051605","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_051605","caller":"cmd/orderServer.go:15","msg":"start server"}
+{"level":"info","time":"20200530_051716","caller":"logger/logger.go:43","msg":"logger init success"}
+{"level":"info","time":"20200530_051716","caller":"cmd/orderServer.go:15","msg":"start server"}

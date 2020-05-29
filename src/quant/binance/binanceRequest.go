@@ -2,7 +2,6 @@ package binance
 
 import (
 	"context"
-	"net/http"
 	"time"
 	"tinyquant/src/logger"
 	"tinyquant/src/mod"
@@ -141,6 +140,7 @@ func (b *Binance) GetHostoryTrades(ctx context.Context, symbol string, limit int
 	r := &mod.ReqParam{
 		Method: "GET",
 		URL:    util.DepthURL,
+		APIKEY: b.accessKey,
 	}
 	r.SetParam(util.SymbolKey, symbol)
 	if limit != 0 {
@@ -149,9 +149,6 @@ func (b *Binance) GetHostoryTrades(ctx context.Context, symbol string, limit int
 	if fromID != 0 {
 		r.SetParam(util.FromIDKey, fromID)
 	}
-
-	r.Header = http.Header{}
-	r.Header.Set("X-MBX-APIKEY", util.ApiKey)
 
 	data, err := util.HttpRequest(ctx, r)
 	if err != nil {

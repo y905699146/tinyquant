@@ -2,7 +2,6 @@ package mod
 
 import (
 	"fmt"
-	"net/http"
 	"net/url"
 )
 
@@ -11,7 +10,7 @@ type ReqParam struct {
 	Method string
 	Query  url.Values
 	Body   url.Values
-	Header http.Header
+	APIKEY string
 }
 
 func (r *ReqParam) SetParam(key string, value interface{}) *ReqParam {

@@ -88,3 +88,22 @@ func ToInt64(v interface{}) int64 {
 		return vvv
 	}
 }
+
+func ToBool(v interface{}) bool {
+	if v == nil {
+		return false
+	}
+
+	switch v.(type) {
+	case bool:
+		return v.(bool)
+	default:
+		vv := fmt.Sprint(v)
+
+		if vv == "" {
+			return false
+		}
+
+		return false
+	}
+}

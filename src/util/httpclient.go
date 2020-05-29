@@ -53,13 +53,15 @@ func HttpRequest(ctx context.Context, req *mod.ReqParam) (map[string]interface{}
 	if queryString != "" {
 		urlx = fmt.Sprintf("%s?%s", urlx, queryString)
 	}
-	fmt.Println("full urlx : ", urlx)
 	r, err := http.NewRequest(req.Method, urlx, nil)
 	r = r.WithContext(ctx)
-	if req.Header != nil {
-		r.Header = req.Header
+	if r.Header.Get("User-Agent") == "" {
+		r.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36")
 	}
-	r.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36")
+	if req.APIKEY != "" {
+		r.Header.Add("X-MBX-APIKEY", req.APIKEY)
+	}
+	r.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		logger.Logger.Error("http request failed ", zap.Error(err))
 		return nil, err
