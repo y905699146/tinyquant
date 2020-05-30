@@ -1,44 +1,16 @@
 package logger
 
 import (
-	"fmt"
-	"time"
+	"os"
 
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
+	"github.com/go-kit/kit/log"
+	"github.com/go-kit/kit/log/level"
 )
 
-var Logger *zap.Logger
-
-func formatEncodeTime(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-	enc.AppendString(fmt.Sprintf("%d%02d%02d_%02d%02d%02d", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second()))
-}
+var Logger log.Logger
 
 func InitLogger() {
-	cfg := zap.Config{
-		Level:       zap.NewAtomicLevelAt(zap.DebugLevel),
-		Development: true,
-		Encoding:    "json",
-		EncoderConfig: zapcore.EncoderConfig{
-			TimeKey:        "time",
-			LevelKey:       "level",
-			NameKey:        "logger",
-			CallerKey:      "caller",
-			MessageKey:     "msg",
-			StacktraceKey:  "trace",
-			LineEnding:     zapcore.DefaultLineEnding,
-			EncodeLevel:    zapcore.LowercaseLevelEncoder,
-			EncodeTime:     formatEncodeTime,
-			EncodeDuration: zapcore.SecondsDurationEncoder,
-			EncodeCaller:   zapcore.ShortCallerEncoder,
-		},
-		OutputPaths:      []string{"stdout", "./log/zap.log"},
-		ErrorOutputPaths: []string{"stderr", "./log/error.log"},
-	}
-	var err error
-	Logger, err = cfg.Build()
-	if err != nil {
-		panic("log init fail:" + err.Error())
-	}
-	Logger.Info("logger init success")
+	Logger = log.NewLogfmtLogger(log.NewSyncWriter(os.Stderr))
+	Logger = level.NewFilter(Logger, level.AllowAll())
+	Logger = log.With(Logger, "time", log.DefaultTimestampUTC, "caller", log.DefaultCaller)
 }
