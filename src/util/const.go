@@ -6,10 +6,11 @@ var (
 	BaseURL   string
 	ApiKey    string
 	SecretKey string
+	ProxyURL  string
 )
 
 func InitSystemParams() {
-	BaseURL = viper.GetString("system.BaseUrl")
+	BaseURL = viper.GetString("system.BaseURL")
 	if BaseURL == "" {
 		panic("Get Binance base url failed ")
 	}
@@ -20,6 +21,10 @@ func InitSystemParams() {
 	SecretKey = viper.GetString("system.SecretKey")
 	if SecretKey == "" {
 		panic("Get secretKey failed ")
+	}
+	ProxyURL = viper.GetString("system.ProxyURL")
+	if ProxyURL == "" {
+		panic("Get ProxyURL failed ")
 	}
 }
 

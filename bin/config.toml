@@ -1,6 +1,7 @@
 [system]
-ApiKey = "qkTSd4yLxleQc61AibbRT2Cr5Bp5oZeIU6Ub1LM8c8O0eYZWILadOxFTDJ1IDdUC"
-SecretKey = "QmwmtZ2genrG9Iff2DiFNlsDzK4aFT82Ep8mjclgAzZPCtndpK9WZYxmYCJprjTO"
-BaseUrl = "https://api.binance.com"
+ApiKey = "O6nJgSLEmmersgARn0HknLgqAdyhpcoCyBhxvT5wXxUMqam9lb7lwqZxZ1EVHCrZ"
+SecretKey = "mEaB9CmyuWoW2vIKxMnKw1rof01guPMWORAGRYsahMg4UUpubuLn39cVyz8KIROr"
+BaseURL = "https://api.binance.com"
 WebsocketUrl = "wss://stream.binance.com:9443"
+ProxyURL = "127.0.0.1:7890"
 

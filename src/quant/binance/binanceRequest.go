@@ -3,7 +3,7 @@ package binance
 import (
 	"context"
 	"time"
-	"tinyquant/src/logger"
+	. "tinyquant/src/logger"
 	"tinyquant/src/mod"
 	"tinyquant/src/util"
 
@@ -47,7 +47,7 @@ func (b *Binance) GetDepthMessage(ctx context.Context, symbol string, limit int3
 	depthMsg := &DepthMessage{}
 	data, err := util.HttpRequest(ctx, r)
 	if err != nil {
-		logger.Logger.Error("Binance Service Get Depth Failed", zap.Error(err))
+		Logger.Error("Binance Service Get Depth Failed", zap.Error(err))
 		return nil, err
 	}
 	if _, ok := data["code"]; ok {
@@ -107,7 +107,7 @@ func (b *Binance) GetLatestTrade(ctx context.Context, symbol string, limit int32
 
 	data, err := util.HttpRequest(ctx, r)
 	if err != nil {
-		logger.Logger.Error("Binance Service Get Latest trade Failed", zap.Error(err))
+		Logger.Error("Binance Service Get Latest trade Failed", zap.Error(err))
 		return nil, err
 	}
 	if _, ok := data["code"]; ok {
@@ -152,7 +152,7 @@ func (b *Binance) GetHostoryTrades(ctx context.Context, symbol string, limit int
 
 	data, err := util.HttpRequest(ctx, r)
 	if err != nil {
-		logger.Logger.Error("Binance Service Get Hostory Trades Failed", zap.Error(err))
+		Logger.Error("Binance Service Get Hostory Trades Failed", zap.Error(err))
 		return nil, err
 	}
 	if _, ok := data["code"]; ok {
@@ -206,7 +206,7 @@ func (b *Binance) GetLatestTradeA(ctx context.Context, symbol string, fromId int
 	}
 	data, err := util.HttpRequest(ctx, r)
 	if err != nil {
-		logger.Logger.Error("Binance Service Get Latest trade a Failed", zap.Error(err))
+		Logger.Error("Binance Service Get Latest trade a Failed", zap.Error(err))
 		return nil, err
 	}
 	if _, ok := data["code"]; ok {
