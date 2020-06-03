@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
 	"time"
 	. "tinyquant/src/logger"
 	"tinyquant/src/util"
@@ -67,6 +66,43 @@ type Kline struct {
 	Vol       float64
 }
 
+var _INERNAL_KLINE_PERIOD_REVERTER = map[string]int{
+	"1m":  KLINE_PERIOD_1MIN,
+	"3m":  KLINE_PERIOD_3MIN,
+	"5m":  KLINE_PERIOD_5MIN,
+	"15m": KLINE_PERIOD_15MIN,
+	"30m": KLINE_PERIOD_30MIN,
+	"1h":  KLINE_PERIOD_60MIN,
+	"2h":  KLINE_PERIOD_2H,
+	"4h":  KLINE_PERIOD_4H,
+	"6h":  KLINE_PERIOD_6H,
+	"8h":  KLINE_PERIOD_8H,
+	"12h": KLINE_PERIOD_12H,
+	"1d":  KLINE_PERIOD_1DAY,
+	"3d":  KLINE_PERIOD_3DAY,
+	"1w":  KLINE_PERIOD_1WEEK,
+	"1M":  KLINE_PERIOD_1MONTH,
+}
+
+var _INERNAL_KLINE_PERIOD_CONVERTER = map[int]string{
+	KLINE_PERIOD_1MIN:   "1m",
+	KLINE_PERIOD_3MIN:   "3m",
+	KLINE_PERIOD_5MIN:   "5m",
+	KLINE_PERIOD_15MIN:  "15m",
+	KLINE_PERIOD_30MIN:  "30m",
+	KLINE_PERIOD_60MIN:  "1h",
+	KLINE_PERIOD_1H:     "1h",
+	KLINE_PERIOD_2H:     "2h",
+	KLINE_PERIOD_4H:     "4h",
+	KLINE_PERIOD_6H:     "6h",
+	KLINE_PERIOD_8H:     "8h",
+	KLINE_PERIOD_12H:    "12h",
+	KLINE_PERIOD_1DAY:   "1d",
+	KLINE_PERIOD_3DAY:   "3d",
+	KLINE_PERIOD_1WEEK:  "1w",
+	KLINE_PERIOD_1MONTH: "1M",
+}
+
 /*
 	订阅深度信息
 */
@@ -100,7 +136,7 @@ func (bw *BinanceWs) SubscribeDepth(symbol string, size int) error {
 	return nil
 }
 
-func (bnWs *BinanceWs) parseDepthData(bids, asks [][]interface{}) *Depth {
+func (bw *BinanceWs) parseDepthData(bids, asks [][]interface{}) *Depth {
 	depth := new(Depth)
 	for _, v := range bids {
 		depth.BidList = append(depth.BidList, DepthRecord{util.ToFloat64(v[0]), util.ToFloat64(v[1])})
@@ -112,15 +148,12 @@ func (bnWs *BinanceWs) parseDepthData(bids, asks [][]interface{}) *Depth {
 	return depth
 }
 
-func (bnWs *BinanceWs) SubscribeKline(symbol string, period int) error {
-	if bnWs.klineCallback == nil {
-		return errors.New("place set kline callback func")
-	}
+func (bw *BinanceWs) SubscribeKline(symbol string, period int) error {
 	periodS, isOk := _INERNAL_KLINE_PERIOD_CONVERTER[period]
 	if isOk != true {
 		periodS = "M1"
 	}
-	endpoint := fmt.Sprintf("%s/%s@kline_%s", bnWs.baseURL, strings.ToLower(pair.ToSymbol("")), periodS)
+	endpoint := fmt.Sprintf("%s/%s@kline_%s", bw.baseURL, symbol, periodS)
 
 	handle := func(msg []byte) error {
 		datamap := make(map[string]interface{})
@@ -139,14 +172,42 @@ func (bnWs *BinanceWs) SubscribeKline(symbol string, period int) error {
 		case "kline":
 			k := datamap["k"].(map[string]interface{})
 			period := _INERNAL_KLINE_PERIOD_REVERTER[k["i"].(string)]
-			kline := bnWs.parseKlineData(k)
-			kline.Pair = pair
-			bnWs.klineCallback(kline, period)
+			kline := bw.parseKlineData(k)
+			kline.symbol = symbol
+			bw.klineCallback(kline, period)
 			return nil
 		default:
 			return errors.New("unknown message " + msgType)
 		}
 	}
-	bnWs.subscribe(endpoint, handle)
+	err := util.NewWsConn(endpoint, util.ProxyURL, handle).NewWebsocket()
+	if err != nil {
+		Logger.Error("[ws] SubscribeDepth failed ", zap.Error(err))
+	}
 	return nil
+}
+
+func (bnWs *BinanceWs) parseKlineData(k map[string]interface{}) *Kline {
+	kline := &Kline{
+		Timestamp: int64(util.ToInt(k["t"])) / 1000,
+		Open:      util.ToFloat64(k["o"]),
+		Close:     util.ToFloat64(k["c"]),
+		High:      util.ToFloat64(k["h"]),
+		Low:       util.ToFloat64(k["l"]),
+		Vol:       util.ToFloat64(k["v"]),
+	}
+	return kline
+}
+
+func (bw *BinanceWs) parseTickerData(tickmap map[string]interface{}) *Ticker {
+	t := new(Ticker)
+	t.Date = util.ToUint64(tickmap["E"])
+	t.Last = util.ToFloat64(tickmap["c"])
+	t.Vol = util.ToFloat64(tickmap["v"])
+	t.Low = util.ToFloat64(tickmap["l"])
+	t.High = util.ToFloat64(tickmap["h"])
+	t.Buy = util.ToFloat64(tickmap["b"])
+	t.Sell = util.ToFloat64(tickmap["a"])
+
+	return t
 }
