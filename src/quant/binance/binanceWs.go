@@ -21,6 +21,13 @@ type BinanceWs struct {
 	wsConns        []*util.WsConn
 }
 
+func NewBinanceWS(baseURL, ProxyURL string) *BinanceWs {
+	return &BinanceWs{
+		baseURL:  baseURL,
+		proxyUrl: ProxyURL,
+	}
+}
+
 type Ticker struct {
 	symbol string  `json:"omitempty"`
 	Last   float64 `json:"last,string"`

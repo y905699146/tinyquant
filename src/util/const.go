@@ -3,10 +3,11 @@ package util
 import "github.com/spf13/viper"
 
 var (
-	BaseURL   string
-	ApiKey    string
-	SecretKey string
-	ProxyURL  string
+	BaseURL      string
+	ApiKey       string
+	SecretKey    string
+	ProxyURL     string
+	WebSocketURL string
 )
 
 func InitSystemParams() {
@@ -25,6 +26,10 @@ func InitSystemParams() {
 	ProxyURL = viper.GetString("system.ProxyURL")
 	if ProxyURL == "" {
 		panic("Get ProxyURL failed ")
+	}
+	WebSocketURL = viper.GetString("system.WebsocketUrl")
+	if WebSocketURL == "" {
+		panic("Get WebSocketURL failed ")
 	}
 }
 
